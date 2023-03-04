@@ -1,19 +1,21 @@
 package com.company.ecommerce.entity;
 
 import jakarta.persistence.*;
+import jdk.jfr.DataAmount;
 import lombok.Data;
+
+import java.util.List;
 
 @Entity
 @Data
-public class Photo {
+public class Gender {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
     @Column(name = "id", nullable = false)
     private Long id;
 
-    private String link;
+    private String name;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "perProductId", referencedColumnName = "id")
-    private PerProduct perProduct;
+    @ManyToMany(mappedBy = "genders")
+    private List<Category> categories;
 }

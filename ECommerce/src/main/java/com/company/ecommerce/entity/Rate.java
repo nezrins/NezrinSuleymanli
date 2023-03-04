@@ -2,16 +2,19 @@ package com.company.ecommerce.entity;
 
 import jakarta.persistence.*;
 import lombok.Data;
+import lombok.ToString;
 
 @Entity
 @Data
-public class Photo {
+public class Rate {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
     @Column(name = "id", nullable = false)
     private Long id;
 
-    private String link;
+    private String comment;
+
+    private Double point;//like 3.0 out of 5
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "perProductId", referencedColumnName = "id")

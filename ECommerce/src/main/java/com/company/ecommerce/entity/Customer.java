@@ -5,15 +5,17 @@ import lombok.Data;
 
 @Entity
 @Data
-public class Photo {
+public class Customer {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
     @Column(name = "id", nullable = false)
     private Long id;
 
-    private String link;
+    private String name;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "perProductId", referencedColumnName = "id")
-    private PerProduct perProduct;
+    private String email;
+
+    private String number;
+
+
 }
