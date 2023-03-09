@@ -1,6 +1,8 @@
 package com.company.ecommerce.controller;
 
+import com.company.ecommerce.entity.Category;
 import com.company.ecommerce.entity.Product;
+import com.company.ecommerce.service.ProductService;
 import com.company.ecommerce.service.ProductServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -44,6 +46,12 @@ public class ProductController {
     @GetMapping("/{id}")
     public ResponseEntity<?> getProductById(@PathVariable("id") Long id){
         Product product = productService.getProductById(id);
+        return new ResponseEntity<>(product, HttpStatus.OK);
+    }
+
+    @GetMapping("/category/{categoryId}")
+    public ResponseEntity<?> getProductByCategory(@PathVariable("categoryId") Long category) {
+        List<Product> product = productService.getProductByCategory(category);
         return new ResponseEntity<>(product, HttpStatus.OK);
     }
 }
