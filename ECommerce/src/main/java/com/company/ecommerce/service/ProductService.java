@@ -2,6 +2,7 @@ package com.company.ecommerce.service;
 
 import com.company.ecommerce.entity.Product;
 
+import java.util.Collection;
 import java.util.List;
 
 public interface ProductService {
@@ -10,4 +11,5 @@ public interface ProductService {
     void deleteProduct(Long id);
     List<Product> getProducts();
     Product getProductById(Long id);
+    List<Product> getProductByCategory(Long id);
 }

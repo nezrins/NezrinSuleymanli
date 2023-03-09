@@ -6,6 +6,7 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
 
@@ -53,5 +54,11 @@ public class ProductServiceImpl implements ProductService {
         if(givenProduct.isPresent())
             return givenProduct.get();
         return product;
+    }
+
+    @Override
+    public List<Product> getProductByCategory(Long id) {
+        List<Product> products = (List<Product>) productRepo.findAllActiveUsersNative(id);
+        return products;
     }
 }
