@@ -17,5 +17,11 @@ public class Customer {
 
     private String number;
 
+    private String password;
+
+    private String cardNo;
+
+
+
 
 }

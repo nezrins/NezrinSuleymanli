@@ -1,5 +1,6 @@
 package com.company.ecommerce.entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import lombok.Data;
 
@@ -13,6 +14,7 @@ public class Photo {
 
     private String link;
 
+    @JsonBackReference
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "perProductId", referencedColumnName = "id")
     private PerProduct perProduct;

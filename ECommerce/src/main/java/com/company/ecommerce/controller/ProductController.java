@@ -4,7 +4,6 @@ import com.company.ecommerce.entity.Category;
 import com.company.ecommerce.entity.Product;
 import com.company.ecommerce.service.ProductService;
 import com.company.ecommerce.service.ProductServiceImpl;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -12,11 +11,12 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/products")
+@RequestMapping(value = "/products",method = RequestMethod.GET)
 public class ProductController {
-
-    @Autowired
-    ProductServiceImpl productService;
+    private final ProductServiceImpl productService;
+    public ProductController(ProductServiceImpl productService) {
+        this.productService = productService;
+    }
 
     @PostMapping("/save-product")
     @ResponseStatus(HttpStatus.CREATED)
