@@ -3,6 +3,7 @@ package com.company.ecommerce.entity;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.Data;
+import org.hibernate.Hibernate;
 
 import java.util.List;
 import java.util.Set;
@@ -28,4 +29,10 @@ public class Category {
             inverseJoinColumns = { @JoinColumn(name = "genderId") }
     )
     private List<Gender> genders;
+
+    public List<Gender> getGenders() {
+        Hibernate.initialize(genders);
+        return genders;
+    }
+
 }

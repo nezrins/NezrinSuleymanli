@@ -11,5 +11,4 @@ import java.util.Collection;
 public interface ProductRepository extends JpaRepository<Product, Long> {
     @Query(value = "SELECT u FROM Product u WHERE u.category.id = ?1")
     Collection<Product> findAllActiveUsersNative(Long categoryId);
-
 }
