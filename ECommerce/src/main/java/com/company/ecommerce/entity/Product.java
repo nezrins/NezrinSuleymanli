@@ -21,7 +21,7 @@ public class Product {
 
     private String description;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JsonBackReference
     @JoinColumn(name = "brand_id", referencedColumnName = "brand_id")
     private Brand brand;
@@ -30,7 +30,7 @@ public class Product {
     @OneToMany(mappedBy = "product",cascade = CascadeType.ALL,fetch = FetchType.EAGER)
     private List<PerProduct> products;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JsonBackReference
     @JoinColumn(name = "categoryId",referencedColumnName = "id")
     private Category category;

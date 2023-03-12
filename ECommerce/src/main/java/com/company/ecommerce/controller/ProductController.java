@@ -9,9 +9,10 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
-@RequestMapping(value = "/products",method = RequestMethod.GET)
+@RequestMapping(value = "/api/products",method = RequestMethod.GET)
 public class ProductController {
     private final ProductServiceImpl productService;
     public ProductController(ProductServiceImpl productService) {
@@ -54,4 +55,16 @@ public class ProductController {
         List<Product> product = productService.getProductByCategory(category);
         return new ResponseEntity<>(product, HttpStatus.OK);
     }
+
+    @GetMapping("/searchByDescription")
+    public ResponseEntity<?> searchByDescription(@RequestParam(value = "search") String search) {
+        if (search == null || search.trim().isEmpty()) {
+            throw new IllegalArgumentException("Search term cannot be empty.");
+        }
+        List<Product> product=productService.getProducts()
+                .stream().filter(c->c.getDescription().toUpperCase().contains(search.toUpperCase())
+               ).collect(Collectors.toList());
+        return new ResponseEntity<>(product, HttpStatus.OK);
+    }
+
 }

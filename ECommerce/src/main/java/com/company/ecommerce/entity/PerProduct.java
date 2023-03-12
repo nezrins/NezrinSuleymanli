@@ -23,18 +23,18 @@ public class PerProduct {
     private List<Photo> photos;
 
     @JsonBackReference
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "productId", referencedColumnName = "id")
     private Product product;
 
 
     @JsonBackReference
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "colorId", referencedColumnName = "id")
     private Color color;
 
     @JsonBackReference
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "sizeId", referencedColumnName = "id")
     private Size size;
 

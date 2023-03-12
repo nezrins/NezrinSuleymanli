@@ -61,4 +61,6 @@ public class ProductServiceImpl implements ProductService {
         List<Product> products = (List<Product>) productRepo.findAllActiveUsersNative(id);
         return products;
     }
+
+
 }
