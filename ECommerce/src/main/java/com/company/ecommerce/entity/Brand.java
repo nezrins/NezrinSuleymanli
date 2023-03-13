@@ -23,7 +23,7 @@ public class Brand {
     private String brandName;
 
 
-    @JsonManagedReference
+    @JsonIgnore
     @OneToMany(mappedBy = "brand",cascade = CascadeType.ALL,fetch = FetchType.EAGER)
     private List<Product> products;
 
