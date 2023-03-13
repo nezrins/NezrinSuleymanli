@@ -22,7 +22,7 @@ public class Product {
     private String description;
 
     @ManyToOne(fetch = FetchType.EAGER)
-    @JsonBackReference
+//    @JsonBackReference
     @JoinColumn(name = "brand_id", referencedColumnName = "brand_id")
     private Brand brand;
 
@@ -31,7 +31,7 @@ public class Product {
     private List<PerProduct> products;
 
     @ManyToOne(fetch = FetchType.EAGER)
-    @JsonBackReference
+//    @JsonBackReference
     @JoinColumn(name = "categoryId",referencedColumnName = "id")
     private Category category;
 }
