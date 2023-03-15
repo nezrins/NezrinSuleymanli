@@ -1,8 +1,6 @@
 package com.company.ecommerce.controller;
 
-import com.company.ecommerce.entity.Category;
 import com.company.ecommerce.entity.Product;
-import com.company.ecommerce.service.ProductService;
 import com.company.ecommerce.service.ProductServiceImpl;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
