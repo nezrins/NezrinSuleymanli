@@ -1,7 +1,6 @@
 package com.company.ecommerce.controller;
 
-import com.company.ecommerce.entity.*;
-import com.company.ecommerce.service.ProductService;
+import com.company.ecommerce.entity.Product;
 import com.company.ecommerce.service.ProductServiceImpl;
 import jakarta.annotation.PostConstruct;
 import jakarta.persistence.*;
