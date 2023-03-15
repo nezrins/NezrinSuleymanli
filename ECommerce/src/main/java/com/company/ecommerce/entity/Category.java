@@ -1,8 +1,12 @@
 package com.company.ecommerce.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import org.hibernate.Hibernate;
 
 import java.util.List;
@@ -10,6 +14,9 @@ import java.util.Set;
 
 @Entity
 @Data
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class Category {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
@@ -18,11 +25,17 @@ public class Category {
     @Column(name = "category_name")
     private String categoryName;
 
-    @JsonManagedReference
+    private String iconLink;
+
+    @JsonIgnore
     @OneToMany(mappedBy = "category",cascade = CascadeType.ALL,fetch = FetchType.EAGER)
     private Set<Product> products;
 
-    @ManyToMany(cascade = { CascadeType.ALL })
+    @JsonIgnore
+    @OneToMany(mappedBy = "category",cascade = CascadeType.ALL,fetch = FetchType.EAGER)
+    private List<Sub_category> sub_categories;
+
+    @ManyToMany(cascade = { CascadeType.ALL },fetch = FetchType.EAGER)
     @JoinTable(
             name = "category_gender",
             joinColumns = { @JoinColumn(name = "categoryId") },
