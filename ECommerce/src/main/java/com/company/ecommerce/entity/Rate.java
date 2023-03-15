@@ -2,11 +2,13 @@ package com.company.ecommerce.entity;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
-import lombok.Data;
-import lombok.ToString;
+import lombok.*;
 
 @Entity
 @Data
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class Rate {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
@@ -17,6 +19,7 @@ public class Rate {
 
     private Double point;//like 3.0 out of 5
 
+    private String userName;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JsonBackReference

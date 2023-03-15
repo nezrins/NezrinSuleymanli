@@ -3,13 +3,19 @@ package com.company.ecommerce.entity;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 
 import java.util.List;
 
 @Entity
 @Data
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class PerProduct {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
@@ -17,6 +23,8 @@ public class PerProduct {
     private Long id;
 
     private Double price;
+
+    private String code;
 
     @JsonManagedReference
     @OneToMany(mappedBy = "perProduct",cascade = CascadeType.ALL,fetch = FetchType.EAGER)
@@ -28,12 +36,14 @@ public class PerProduct {
     private Product product;
 
 
-    @JsonBackReference
+//    @JsonBackReference
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "colorId", referencedColumnName = "id")
     private Color color;
 
-    @JsonBackReference
+    @Column(name = "stock_number")
+    private int stockNumbers;
+//    @JsonBackReference
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "sizeId", referencedColumnName = "id")
     private Size size;

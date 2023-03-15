@@ -1,11 +1,16 @@
 package com.company.ecommerce.service;
 
-import com.company.ecommerce.entity.Product;
+import com.company.ecommerce.entity.*;
 import com.company.ecommerce.repo.ProductRepository;
+import jakarta.annotation.PostConstruct;
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.EntityManagerFactory;
+import jakarta.persistence.PersistenceContext;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
@@ -13,6 +18,8 @@ import java.util.Optional;
 @Service
 public class ProductServiceImpl implements ProductService {
 
+    @PersistenceContext
+    private EntityManager entityManager;
     @Autowired
     private ProductRepository productRepo;
     public Product createProduct(Product product){
