@@ -2,10 +2,16 @@ package com.company.ecommerce.entity;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Entity
 @Data
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class Photo {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)

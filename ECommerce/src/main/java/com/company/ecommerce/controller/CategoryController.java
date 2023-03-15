@@ -2,6 +2,7 @@ package com.company.ecommerce.controller;
 
 import com.company.ecommerce.entity.Category;
 import com.company.ecommerce.service.CategoryServiceImpl;
+import jakarta.annotation.PostConstruct;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -48,4 +49,5 @@ public class CategoryController {
         Category category = categoryService.getCategoryById(id);
         return new ResponseEntity<>(category, HttpStatus.OK);
     }
+
 }
