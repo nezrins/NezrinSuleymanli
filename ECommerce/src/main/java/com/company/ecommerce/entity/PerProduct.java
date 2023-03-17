@@ -1,6 +1,7 @@
 package com.company.ecommerce.entity;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -51,4 +52,10 @@ public class PerProduct {
     @JsonManagedReference
     @OneToMany(mappedBy = "perProduct",cascade = CascadeType.ALL,fetch = FetchType.EAGER)
     private List<Rate> rate;
+
+
+    @JsonIgnore
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "bucketId",referencedColumnName = "id")
+    private Bucket bucket;
 }
