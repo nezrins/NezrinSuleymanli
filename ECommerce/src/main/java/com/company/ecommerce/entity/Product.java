@@ -26,8 +26,8 @@ public class Product {
 
     @ManyToOne(fetch = FetchType.EAGER)
 //    @JsonBackReference
-    @JoinColumn(name = "categoryId",referencedColumnName = "id")
-    private Category category;
+    @JoinColumn(name = "sub_categoryId",referencedColumnName = "id")
+    private Sub_category category;
 
     @ManyToOne(fetch = FetchType.EAGER)
     @Cascade(org.hibernate.annotations.CascadeType.SAVE_UPDATE)

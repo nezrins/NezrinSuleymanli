@@ -10,5 +10,5 @@ import java.util.List;
 @Repository
 public interface GenderRepository extends JpaRepository<Gender,Long> {
 
-    Gender findByName(String name);
+    List<Gender> findByName(String name);
 }

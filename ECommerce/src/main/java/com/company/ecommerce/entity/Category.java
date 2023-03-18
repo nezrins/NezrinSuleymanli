@@ -26,25 +26,11 @@ public class Category {
 
     private String iconLink;
 
-    @JsonIgnore
-    @OneToMany(mappedBy = "category",cascade = CascadeType.ALL,fetch = FetchType.EAGER)
-    private Set<Product> products;
 
-
+//    @JsonIgnore
     @OneToMany(mappedBy = "category",cascade = CascadeType.ALL,fetch = FetchType.EAGER)
     private List<Sub_category> sub_categories;
 
-    @ManyToMany(cascade = { CascadeType.ALL},fetch = FetchType.EAGER)
-    @JoinTable(
-            name = "category_gender",
-            joinColumns = { @JoinColumn(name = "categoryId") },
-            inverseJoinColumns = { @JoinColumn(name = "genderId") }
-    )
-    private List<Gender> genders;
 
-    public List<Gender> getGenders() {
-        Hibernate.initialize(genders);
-        return genders;
-    }
 
 }

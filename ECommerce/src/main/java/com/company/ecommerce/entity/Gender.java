@@ -28,7 +28,7 @@ public class Gender {
     private String name;
 
     @ManyToMany(mappedBy = "genders")
-    private List<Category> categories;
+    private List<Sub_category> categories;
 
 
 

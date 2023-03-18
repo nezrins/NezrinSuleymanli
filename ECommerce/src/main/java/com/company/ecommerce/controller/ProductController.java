@@ -1,37 +1,58 @@
 package com.company.ecommerce.controller;
 
-import com.company.ecommerce.entity.Product;
+import com.company.ecommerce.entity.*;
+import com.company.ecommerce.repo.CategoryRepository;
+import com.company.ecommerce.repo.ProductRepository;
 import com.company.ecommerce.service.ProductServiceImpl;
-import jakarta.annotation.PostConstruct;
 import jakarta.persistence.*;
-import jakarta.persistence.criteria.CriteriaBuilder;
-import jakarta.persistence.metamodel.Metamodel;
-import jakarta.transaction.Transactional;
-import org.hibernate.SessionFactory;
-import org.hibernate.boot.SessionFactoryBuilder;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
-import java.util.Map;
 import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping(value = "/api/products",method = RequestMethod.GET)
 public class ProductController {
     private final ProductServiceImpl productService;
-    public ProductController(ProductServiceImpl productService) {
+    private final EntityManager em;
+    private final ProductRepository productRepository;
+    private final CategoryRepository categoryRepository;
+
+    public ProductController(ProductServiceImpl productService, EntityManager em,
+                             ProductRepository productRepository,
+                             CategoryRepository categoryRepository) {
         this.productService = productService;
+        this.em = em;
+        this.productRepository = productRepository;
+        this.categoryRepository = categoryRepository;
     }
 
     @PostMapping(value = "/save-product",consumes = "application/json; charset=utf-8")
     @ResponseStatus(HttpStatus.CREATED)
+    @Transactional
     public ResponseEntity<?> createProduct(@RequestBody Product product){
-        Product userResponse = productService.createProduct(product);
-        return new ResponseEntity<>(userResponse, HttpStatus.CREATED);
+        Brand brand = product.getBrand(); // get the Brand entity from the Product entity
+        Brand savedBrand = em.merge(brand); // save the Brand entity to the database
+        product.setBrand(savedBrand);
+
+        List<PerProduct> perProducts = product.getProducts();
+        for (PerProduct perProduct : perProducts) {
+            Color color = perProduct.getColor();
+            Color savedColor = em.merge(color); // save the Color entity to the database
+            perProduct.setColor(savedColor); // set the saved Color entity to the PerProduct entity
+
+            Size size = perProduct.getSize();
+            Size savedSize = em.merge(size); // save the Size entity to the database
+            perProduct.setSize(savedSize);
+
+        }
+
+        // set the saved Brand entity to the Product entity
+        Product savedProduct = em.merge(product); // save the Product entity to the database
+        return new ResponseEntity<>(savedProduct, HttpStatus.CREATED);
     }
 
     @PutMapping("/update-product/{id}")
