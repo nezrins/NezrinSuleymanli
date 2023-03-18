@@ -9,9 +9,13 @@ import jakarta.persistence.metamodel.Metamodel;
 import jakarta.transaction.Transactional;
 import org.hibernate.SessionFactory;
 import org.hibernate.boot.SessionFactoryBuilder;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -47,10 +51,12 @@ public class ProductController {
     }
 
     @GetMapping()
-    public ResponseEntity<?> getProducts(){
-        List<Product> products = productService.getProducts();
+    public ResponseEntity<?> getProducts(@RequestParam(defaultValue = "0") Integer pageNo,
+                                         @RequestParam(defaultValue = "10") Integer pageSize){
+        List<Product> products = productService.getProducts(pageNo,pageSize);
         return new ResponseEntity<>(products, HttpStatus.OK);
     }
+
 
     @GetMapping("/{id}")
     public ResponseEntity<?> getProductById(@PathVariable("id") Long id){
@@ -59,21 +65,25 @@ public class ProductController {
     }
 
     @GetMapping("/category/{categoryId}")
-    public ResponseEntity<?> getProductByCategory(@PathVariable("categoryId") Long category) {
-        List<Product> product = productService.getProductByCategory(category);
+    public ResponseEntity<?> getProductByCategory(@PathVariable("categoryId") Long category,
+                                                  @RequestParam(defaultValue = "0") Integer pageNo,
+                                                  @RequestParam(defaultValue = "10") Integer pageSize) {
+        List<Product> product = productService.getProductByCategory(category,pageNo,pageSize);
         return new ResponseEntity<>(product, HttpStatus.OK);
     }
 
-    @GetMapping("/searchByDescription")
-    public ResponseEntity<?> searchByDescription(@RequestParam(value = "search") String search) {
-        if (search == null || search.trim().isEmpty()) {
-            throw new IllegalArgumentException("Search term cannot be empty.");
-        }
-        List<Product> product=productService.getProducts()
-                .stream().filter(c->c.getDescription().toUpperCase().contains(search.toUpperCase())
-               ).collect(Collectors.toList());
-        return new ResponseEntity<>(product, HttpStatus.OK);
-    }
+//    @GetMapping("/searchByDescription")
+//    public ResponseEntity<?> searchByDescription(@RequestParam(value = "search") String search) {
+//        if (search == null || search.trim().isEmpty()) {
+//            throw new IllegalArgumentException("Search term cannot be empty.");
+//        }
+//        List<Product> product=productService.getProducts()
+//                .stream().filter(c->c.getDescription().toUpperCase().contains(search.toUpperCase())
+//               ).collect(Collectors.toList());
+//        return new ResponseEntity<>(product, HttpStatus.OK);
+//    }
+
+
 //    @PostConstruct
 //    public void init(){
 //        Gender gender= Gender.builder().name("Qadın").build();
