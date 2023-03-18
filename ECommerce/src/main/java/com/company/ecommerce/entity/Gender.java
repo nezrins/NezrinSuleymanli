@@ -29,4 +29,7 @@ public class Gender {
 
     @ManyToMany(mappedBy = "genders")
     private List<Category> categories;
+
+
+
 }

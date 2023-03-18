@@ -1,7 +1,6 @@
 package com.company.ecommerce.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -31,11 +30,11 @@ public class Category {
     @OneToMany(mappedBy = "category",cascade = CascadeType.ALL,fetch = FetchType.EAGER)
     private Set<Product> products;
 
-    @JsonIgnore
+
     @OneToMany(mappedBy = "category",cascade = CascadeType.ALL,fetch = FetchType.EAGER)
     private List<Sub_category> sub_categories;
 
-    @ManyToMany(cascade = { CascadeType.ALL },fetch = FetchType.EAGER)
+    @ManyToMany(cascade = { CascadeType.ALL},fetch = FetchType.EAGER)
     @JoinTable(
             name = "category_gender",
             joinColumns = { @JoinColumn(name = "categoryId") },
