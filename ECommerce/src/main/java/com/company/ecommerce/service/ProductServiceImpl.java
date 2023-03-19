@@ -1,6 +1,7 @@
 package com.company.ecommerce.service;
 
 import com.company.ecommerce.entity.*;
+import com.company.ecommerce.repo.PerProductRepository;
 import com.company.ecommerce.repo.ProductRepository;
 import jakarta.annotation.PostConstruct;
 import jakarta.persistence.EntityManager;
@@ -9,6 +10,7 @@ import jakarta.persistence.PersistenceContext;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Arrays;
 import java.util.Collection;
@@ -22,6 +24,9 @@ public class ProductServiceImpl implements ProductService {
     private EntityManager entityManager;
     @Autowired
     private ProductRepository productRepo;
+
+    @Autowired
+    private PerProductRepository perProductRepository;
     public Product createProduct(Product product){
         Product savedProduct = productRepo.save(product);
         return savedProduct;
@@ -40,12 +45,14 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
+    @Transactional
     public void deleteProduct(Long id) {
-        Optional<Product> product = productRepo.findById(id);
-        if(product.isPresent()){
-            Product deletedProduct = product.get();
-            productRepo.delete(deletedProduct);
-        }
+            Optional<Product> product = productRepo.findById(id);
+
+            if(product.isPresent()){
+                Product deletedProduct = product.get();
+                productRepo.delete(deletedProduct);
+            }
     }
 
     @Override

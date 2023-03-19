@@ -15,14 +15,18 @@ public class Bucket {
     @Column(name = "id", nullable = false)
     private Long id;
 
-    @OneToMany(mappedBy = "bucket",cascade = CascadeType.ALL,fetch = FetchType.EAGER)
-    private List<PerProduct> products;
-
-
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "customer_id", referencedColumnName = "id")
     private Customer customer;
 
-
     private Long productNumber;
+
+    @ManyToMany(mappedBy = "buckets",cascade = CascadeType.ALL)
+    private List<PerProduct> perProduct;
+
+    @OneToOne(cascade = CascadeType.ALL,fetch = FetchType.EAGER)
+    @JoinColumn(name = "size_id", referencedColumnName = "id")
+    private Size size;
+
+    private int amountOfProduct;
 }

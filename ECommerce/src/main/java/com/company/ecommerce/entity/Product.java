@@ -1,6 +1,7 @@
 package com.company.ecommerce.entity;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.*;
@@ -34,7 +35,7 @@ public class Product {
     @JoinColumn(name = "brand_id", referencedColumnName = "brand_id")
     private Brand brand;
 
-    @JsonManagedReference
+
     @OneToMany(mappedBy = "product",cascade = CascadeType.ALL,fetch = FetchType.EAGER)
     private List<PerProduct> products;
 

@@ -31,8 +31,8 @@ public class PerProduct {
     @OneToMany(mappedBy = "perProduct",cascade = CascadeType.ALL,fetch = FetchType.EAGER)
     private List<Photo> photos;
 
-    @JsonBackReference
-    @ManyToOne(fetch = FetchType.EAGER)
+    @JsonIgnore
+    @ManyToOne(fetch = FetchType.EAGER,cascade = CascadeType.ALL)
     @JoinColumn(name = "productId", referencedColumnName = "id")
     private Product product;
 
@@ -42,20 +42,29 @@ public class PerProduct {
     @JoinColumn(name = "colorId", referencedColumnName = "id")
     private Color color;
 
-    @Column(name = "stock_number")
-    private int stockNumbers;
+//    @Column(name = "stock_number")
+//    private int stockNumbers;
 //    @JsonBackReference
-    @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "sizeId", referencedColumnName = "id")
-    private Size size;
+
 
     @JsonManagedReference
     @OneToMany(mappedBy = "perProduct",cascade = CascadeType.ALL,fetch = FetchType.EAGER)
     private List<Rate> rate;
 
+    private int stockNumber;
 
     @JsonIgnore
-    @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "bucketId",referencedColumnName = "id")
-    private Bucket bucket;
+    @OneToMany(mappedBy = "perProduct",fetch =FetchType.EAGER ,cascade = CascadeType.ALL)
+    private List<ProductSizes> productSizes;
+
+
+    @JsonIgnore
+    @ManyToMany(cascade = { CascadeType.ALL},fetch = FetchType.EAGER)
+    @JoinTable(
+            name = "per_product_bucket",
+            joinColumns = { @JoinColumn(name = "perProductId") },
+            inverseJoinColumns = { @JoinColumn(name = "bucketId") }
+    )
+    private List<Bucket> buckets;
+
 }

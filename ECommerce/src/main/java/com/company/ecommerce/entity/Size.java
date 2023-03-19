@@ -21,9 +21,15 @@ public class Size {
     @Column(name = "size_name")
     private String sizeName;
 
+
     @JsonIgnore
-    @OneToMany(mappedBy = "size",cascade = CascadeType.ALL,fetch = FetchType.EAGER)
-    private List<PerProduct> perProducts;
+    @OneToOne(mappedBy = "size", cascade = CascadeType.ALL)
+    private Bucket bucket;
+
+    @JsonIgnore
+    @OneToMany(mappedBy ="size",fetch =FetchType.EAGER ,cascade = CascadeType.ALL)
+    private List<ProductSizes> productSizes;
+
 
 
 }

@@ -8,7 +8,6 @@ import com.company.ecommerce.repo.GenderRepository;
 import com.company.ecommerce.service.CategoryServiceImpl;
 import jakarta.persistence.EntityManager;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
@@ -25,14 +24,15 @@ public class CategoryController {
     private final GenderRepository genderRepository;
     private final CategoryRepository categoryRepository;
 
-    @Autowired
-    EntityManager em;
+
+    private final EntityManager em;
 
 
-    public CategoryController(CategoryServiceImpl categoryService, GenderRepository genderRepository, CategoryRepository categoryRepository) {
+    public CategoryController(CategoryServiceImpl categoryService, GenderRepository genderRepository, CategoryRepository categoryRepository, EntityManager em) {
         this.categoryService = categoryService;
         this.genderRepository = genderRepository;
         this.categoryRepository = categoryRepository;
+        this.em = em;
     }
 
 
@@ -58,6 +58,7 @@ public class CategoryController {
             if(sub_category.getCategory()==null){
                 sub_category.setGenders(existingGenders);
             }
+            sub_category.setCategory(category);
         }
 
         Category userResponse = em.merge(category);

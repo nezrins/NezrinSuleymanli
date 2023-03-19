@@ -33,7 +33,6 @@ public class Sub_category {
     )
     private List<Gender> genders;
 
-    @Contract(pure = true)
     public Sub_category(String name, Category category) {
         this.name = name;
         this.category = category;
