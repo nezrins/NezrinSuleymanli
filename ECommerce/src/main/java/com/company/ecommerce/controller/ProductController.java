@@ -16,7 +16,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @RestController
-@RequestMapping(value = "/api/products",method = RequestMethod.GET)
+@RequestMapping(value = "/products",method = RequestMethod.GET)
 public class ProductController {
     private final ProductServiceImpl productService;
     @Autowired

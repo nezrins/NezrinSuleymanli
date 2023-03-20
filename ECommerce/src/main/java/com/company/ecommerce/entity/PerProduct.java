@@ -58,13 +58,17 @@ public class PerProduct {
     private List<ProductSizes> productSizes;
 
 
+//    @JsonIgnore
+//    @ManyToMany(cascade = { CascadeType.ALL},fetch = FetchType.EAGER)
+//    @JoinTable(
+//            name = "per_product_bucket",
+//            joinColumns = { @JoinColumn(name = "perProductId") },
+//            inverseJoinColumns = { @JoinColumn(name = "bucketId") }
+//    )
+//    private List<Bucket> buckets;
+
     @JsonIgnore
-    @ManyToMany(cascade = { CascadeType.ALL},fetch = FetchType.EAGER)
-    @JoinTable(
-            name = "per_product_bucket",
-            joinColumns = { @JoinColumn(name = "perProductId") },
-            inverseJoinColumns = { @JoinColumn(name = "bucketId") }
-    )
-    private List<Bucket> buckets;
+    @OneToOne(mappedBy = "perProduct", cascade = CascadeType.ALL)
+    private Bucket bucket;
 
 }

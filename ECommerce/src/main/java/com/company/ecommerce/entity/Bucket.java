@@ -1,14 +1,17 @@
 package com.company.ecommerce.entity;
 
 import jakarta.persistence.*;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
+import lombok.extern.slf4j.Slf4j;
 
-import java.util.List;
+import java.util.Optional;
 
 @Entity
 @Getter
 @Setter
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
 public class Bucket {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
@@ -19,14 +22,19 @@ public class Bucket {
     @JoinColumn(name = "customer_id", referencedColumnName = "id")
     private Customer customer;
 
-    private Long productNumber;
+//    private Long productNumber;
 
-    @ManyToMany(mappedBy = "buckets",cascade = CascadeType.ALL)
-    private List<PerProduct> perProduct;
+//    @ManyToMany(mappedBy = "buckets",cascade = CascadeType.ALL)
+//    private List<PerProduct> perProduct;
+
+    @OneToOne(cascade = CascadeType.ALL,fetch = FetchType.EAGER)
+    @JoinColumn(name = "perProduct_id", referencedColumnName = "id")
+    private PerProduct perProduct;
 
     @OneToOne(cascade = CascadeType.ALL,fetch = FetchType.EAGER)
     @JoinColumn(name = "size_id", referencedColumnName = "id")
     private Size size;
 
     private int amountOfProduct;
+
 }

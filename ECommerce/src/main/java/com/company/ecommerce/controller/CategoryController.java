@@ -17,7 +17,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @RestController
-@RequestMapping(value = "/api/categories",method = RequestMethod.GET)
+@RequestMapping(value = "/categories",method = RequestMethod.GET)
 public class CategoryController {
     private final CategoryServiceImpl categoryService;
 
