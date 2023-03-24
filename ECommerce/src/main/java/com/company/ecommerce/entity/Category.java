@@ -1,15 +1,12 @@
 package com.company.ecommerce.entity;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.hibernate.Hibernate;
 
 import java.util.List;
-import java.util.Set;
 
 @Entity
 @Data
@@ -26,25 +23,10 @@ public class Category {
 
     private String iconLink;
 
-    @JsonIgnore
-    @OneToMany(mappedBy = "category",cascade = CascadeType.ALL,fetch = FetchType.EAGER)
-    private Set<Product> products;
 
-
-    @OneToMany(mappedBy = "category",cascade = CascadeType.ALL,fetch = FetchType.EAGER)
+//    @JsonIgnore
+//    @Cascade(org.hibernate.annotations.CascadeType.DELETE_ORPHAN)
+    @OneToMany(mappedBy = "category", cascade = CascadeType.ALL,fetch = FetchType.EAGER)
     private List<Sub_category> sub_categories;
-
-    @ManyToMany(cascade = { CascadeType.ALL},fetch = FetchType.EAGER)
-    @JoinTable(
-            name = "category_gender",
-            joinColumns = { @JoinColumn(name = "categoryId") },
-            inverseJoinColumns = { @JoinColumn(name = "genderId") }
-    )
-    private List<Gender> genders;
-
-    public List<Gender> getGenders() {
-        Hibernate.initialize(genders);
-        return genders;
-    }
 
 }

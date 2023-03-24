@@ -1,12 +1,13 @@
 package com.company.ecommerce.entity;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.util.List;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 @Entity
 @Data
 @Table(name = "sizes")
@@ -16,14 +17,21 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 public class Size {
     @Id
     @Column(name = "id")
+    @GeneratedValue(strategy = GenerationType.SEQUENCE)
     private Long id;
 
     @Column(name = "size_name")
     private String sizeName;
 
     @JsonIgnore
-    @OneToMany(mappedBy = "size",cascade = CascadeType.ALL,fetch = FetchType.EAGER)
-    private List<PerProduct> perProducts;
+    @OneToOne(mappedBy = "size", cascade = CascadeType.ALL)
+    private Bucket bucket;
 
+    @JsonIgnore
+    @OneToMany(mappedBy ="size",fetch =FetchType.EAGER ,cascade = CascadeType.ALL)
+    private List<ProductSizes> productSizes;
 
+    public Size(String sizeName) {
+        this.sizeName=sizeName;
+    }
 }

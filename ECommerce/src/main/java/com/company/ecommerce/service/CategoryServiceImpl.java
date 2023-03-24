@@ -2,7 +2,10 @@ package com.company.ecommerce.service;
 
 import com.company.ecommerce.entity.Category;
 import com.company.ecommerce.entity.Product;
+import com.company.ecommerce.entity.Sub_category;
 import com.company.ecommerce.repo.CategoryRepository;
+import com.company.ecommerce.repo.ProductRepository;
+import com.company.ecommerce.repo.SubCategoryRepository;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -19,6 +22,12 @@ public class CategoryServiceImpl implements CategoryService{
 
     @Autowired
     CategoryRepository categoryRepo;
+    @Autowired
+    private ProductRepository productRepository;
+    @Autowired
+    private SubCategoryRepository subCategoryRepository;
+    @Autowired
+    private ProductServiceImpl productService;
 
     @Override
     public Category createCategory(Category category) {
@@ -37,15 +46,22 @@ public class CategoryServiceImpl implements CategoryService{
         updatedCategory=categoryRepo.save(updatedCategory);
         return updatedCategory;
     }
-
-    @Override
-    public void deleteCategory(Long id) {
-        Optional<Category> product = categoryRepo.findById(id);
-        if(product.isPresent()){
-            Category deletedCategory = product.get();
-            categoryRepo.delete(deletedCategory);
+        @Override
+        @Transactional
+        public void deleteCategory(Long id) {
+            Optional<Category> product = categoryRepo.findById(id);
+            if(product.isPresent()){
+                Category deletedCategory = product.get();
+                List<Sub_category> sub_categories = deletedCategory.getSub_categories();
+                for (Sub_category sub_category : sub_categories) {
+                    for (Product p:sub_category.getProducts()){
+                        productService.deleteProduct(p.getId());
+                    }
+                    subCategoryRepository.deleteSub_categoriesById(sub_category.getId());
+                }
+                categoryRepo.deleteCategoryById(deletedCategory.getId());
+            }
         }
-    }
 
     @Override
     public List<Category> getCategories() {

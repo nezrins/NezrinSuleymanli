@@ -1,11 +1,7 @@
 package com.company.ecommerce.entity;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
-import jakarta.transaction.Transactional;
-import jdk.jfr.DataAmount;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -27,9 +23,11 @@ public class Gender {
 
     private String name;
 
-    @ManyToMany(mappedBy = "genders")
-    private List<Category> categories;
+    @ManyToMany(mappedBy = "genders",cascade = CascadeType.ALL)
+    private List<Sub_category> categories;
 
 
-
+    public Gender(String name) {
+        this.name=name;
+    }
 }
