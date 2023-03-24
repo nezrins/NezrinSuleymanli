@@ -1,14 +1,20 @@
 package com.company.ecommerce.entity;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
-import jdk.jfr.DataAmount;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.util.List;
 
 @Entity
 @Data
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
+@JsonIgnoreProperties("categories")
 public class Gender {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
@@ -17,7 +23,11 @@ public class Gender {
 
     private String name;
 
+    @ManyToMany(mappedBy = "genders",cascade = CascadeType.ALL)
+    private List<Sub_category> categories;
 
-    @ManyToMany(mappedBy = "genders")
-    private List<Category> categories;
+
+    public Gender(String name) {
+        this.name=name;
+    }
 }

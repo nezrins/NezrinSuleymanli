@@ -1,5 +1,6 @@
 package com.company.ecommerce.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Data;
 
@@ -21,7 +22,9 @@ public class Customer {
 
     private String cardNo;
 
-
+   @OneToOne(mappedBy = "customer")
+   @JsonIgnore
+   private Bucket bucket;
 
 
 }
