@@ -1,5 +1,6 @@
-package com.company.ecommerce.entity;
+package com.company.ecommerce.token;
 
+import com.company.ecommerce.entity.Customer;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -21,4 +22,12 @@ public class Token {
 
     @Enumerated(EnumType.STRING)
     private TokenType tokenType;
+
+    private boolean expired;
+
+    private boolean revoked;
+
+    @ManyToOne
+    @JoinColumn(name = "user_id")
+    private Customer user;
 }

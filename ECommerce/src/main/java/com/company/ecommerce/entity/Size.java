@@ -23,11 +23,6 @@ public class Size {
     @Column(name = "size_name")
     private String sizeName;
 
-
-    @JsonIgnore
-    @OneToOne(mappedBy = "size", cascade = CascadeType.ALL)
-    private Bucket bucket;
-
     @JsonIgnore
     @OneToOne(mappedBy = "size", cascade = CascadeType.ALL)
     private Bucket bucket;

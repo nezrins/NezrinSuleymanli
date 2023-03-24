@@ -1,9 +1,6 @@
 package com.company.ecommerce.controller;
 
 import com.company.ecommerce.entity.Bucket;
-import com.company.ecommerce.entity.Customer;
-import com.company.ecommerce.entity.PerProduct;
-import com.company.ecommerce.entity.Size;
 import com.company.ecommerce.service.BucketServiceImpl;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

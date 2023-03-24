@@ -7,7 +7,6 @@ import com.company.ecommerce.repo.CategoryRepository;
 import com.company.ecommerce.repo.GenderRepository;
 import com.company.ecommerce.service.CategoryServiceImpl;
 import jakarta.persistence.EntityManager;
-
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
