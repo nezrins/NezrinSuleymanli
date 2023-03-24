@@ -6,6 +6,9 @@ import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -72,9 +75,10 @@ public class ProductServiceImpl implements ProductService {
 
     }
     @Override
-    public List<Product> getProducts() {
-        List<Product> products = productRepo.findAll();
-        return products;
+    public List<Product> getProducts(int pageNo, int pageSize) {
+        PageRequest pageRequest = PageRequest.of(pageNo, pageSize);
+        Page<Product> products = productRepo.findAll(pageRequest);
+        return products.getContent();
     }
 
     @Override
@@ -87,9 +91,10 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public List<Product> getProductByCategory(Long id) {
-        List<Product> products = (List<Product>) productRepo.findAllActiveUsersNative(id);
-        return products;
+    public List<Product> getProductByCategory(Long id,int pageNo, int pageSize) {
+        PageRequest pageRequest = PageRequest.of(pageNo, pageSize);
+        Page<Product> products = productRepo.findByCategory(id, pageRequest);
+        return products.getContent();
     }
 
 

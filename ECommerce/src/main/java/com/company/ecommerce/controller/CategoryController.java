@@ -19,6 +19,7 @@ import java.util.List;
 @RequestMapping(value = "/categories",method = RequestMethod.GET)
 public class CategoryController {
     private final CategoryServiceImpl categoryService;
+    private final GenderRepository genderRepository;
 
     private final GenderRepository genderRepository;
     private final CategoryRepository categoryRepository;
