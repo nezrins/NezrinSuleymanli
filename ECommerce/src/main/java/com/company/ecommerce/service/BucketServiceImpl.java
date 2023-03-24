@@ -1,15 +1,16 @@
 package com.company.ecommerce.service;
 
-import com.company.ecommerce.entity.*;
+import com.company.ecommerce.entity.Bucket;
+import com.company.ecommerce.entity.Customer;
+import com.company.ecommerce.entity.PerProduct;
+import com.company.ecommerce.entity.Size;
 import com.company.ecommerce.repo.*;
 import jakarta.persistence.EntityManager;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class BucketServiceImpl implements BucketService {
@@ -49,7 +50,6 @@ public class BucketServiceImpl implements BucketService {
         }
     }
 
-
     @Override
     public List<Bucket> getBucket(Long customerId) {
         List<Bucket> buckets = bucketRepository.findBucketProductsByCustomerId(customerId);
@@ -57,10 +57,10 @@ public class BucketServiceImpl implements BucketService {
     }
 
     @Override
+    @Transactional
     public void deleteProductFromBucket(Long customerId, Long perProductId, Long sizeId) {
         Bucket bucketProduct = bucketRepository.findProduct(customerId, perProductId, sizeId);
-        Long deletedProductId = bucketProduct.getId();
-        bucketRepository.deleteById(deletedProductId);
+        bucketRepository.deleteBucketById(bucketProduct.getId());
     }
 
     @Override

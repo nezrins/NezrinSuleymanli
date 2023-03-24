@@ -60,7 +60,6 @@ public class CategoryController {
             }
             sub_category.setCategory(category);
         }
-
         Category userResponse = em.merge(category);
         return new ResponseEntity<>(userResponse, HttpStatus.CREATED);
     }

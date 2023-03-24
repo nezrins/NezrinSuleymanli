@@ -1,17 +1,19 @@
 package com.company.ecommerce.controller;
 
 import com.company.ecommerce.entity.*;
-import com.company.ecommerce.repo.CategoryRepository;
-import com.company.ecommerce.repo.ProductRepository;
+import com.company.ecommerce.repo.*;
 import com.company.ecommerce.service.ProductServiceImpl;
-import jakarta.persistence.*;
-import org.springframework.beans.factory.annotation.Autowired;
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.PersistenceContext;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 
-import java.util.Arrays;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -19,44 +21,145 @@ import java.util.stream.Collectors;
 @RequestMapping(value = "/products",method = RequestMethod.GET)
 public class ProductController {
     private final ProductServiceImpl productService;
-    @Autowired
-    EntityManager em;
+
+    @PersistenceContext
+    private  EntityManager em;
     private final ProductRepository productRepository;
     private final CategoryRepository categoryRepository;
+    private final BrandRepository brandRepository;
+    private final GenderRepository genderRepository;
+    private final SizeRepository sizeRepository;
+    private final ColorRepository colorRepository;
+    private final SubCategoryRepository subCategoryRepository;
+    private final ProductSizesRepository productSizesRepository;
+    private final PerProductRepository perProductRepository;
 
     public ProductController(ProductServiceImpl productService,
                              ProductRepository productRepository,
-                             CategoryRepository categoryRepository) {
+                             CategoryRepository categoryRepository, BrandRepository brandRepository,
+                             GenderRepository genderRepository, SizeRepository sizeRepository, ColorRepository colorRepository,
+                             SubCategoryRepository subCategoryRepository,
+                             ProductSizesRepository productSizesRepository,
+                             PerProductRepository perProductRepository) {
         this.productService = productService;
-
         this.productRepository = productRepository;
         this.categoryRepository = categoryRepository;
+        this.brandRepository = brandRepository;
+        this.genderRepository = genderRepository;
+        this.sizeRepository = sizeRepository;
+        this.colorRepository = colorRepository;
+        this.subCategoryRepository = subCategoryRepository;
+        this.productSizesRepository = productSizesRepository;
+        this.perProductRepository = perProductRepository;
     }
 
     @PostMapping(value = "/save-product",consumes = "application/json; charset=utf-8")
     @ResponseStatus(HttpStatus.CREATED)
     @Transactional
     public ResponseEntity<?> createProduct(@RequestBody Product product){
+        String name=product.getProductName();
         Brand brand = product.getBrand();
-        Brand savedBrand = em.merge(brand);
-        Sub_category ss=product.getCategory();
-        Sub_category savedCategory=em.merge(ss);
-        product.setBrand(savedBrand);
-        product.setCategory(savedCategory);
-        List<PerProduct> perProducts = product.getProducts();
-        for (PerProduct perProduct : perProducts) {
-            Color color = perProduct.getColor();
-            Color savedColor = em.merge(color);
-            perProduct.setColor(savedColor);
-
-//            Size size = perProduct.getSize();
-//            Size savedSize = em.merge(size);
-//            perProduct.setSize(savedSize);
-
+        Brand savedBrand = null;
+        List<Brand> existingBrands = brandRepository.findByBrandName(brand.getBrandName());
+        List<Product> existingProducts = productRepository.findByProductName(name);
+        if (existingBrands.size() > 0) {
+            savedBrand = existingBrands.get(0);
+        } else {
+            savedBrand = em.merge(brand);
         }
+        product.setBrand(savedBrand);
 
-        // set the saved Brand entity to the Product entity
-        Product savedProduct = em.merge(product); // save the Product entity to the database
+        Sub_category sub_category = product.getSub_categories();
+        Sub_category savedSub_category = null;
+        Gender existingGender = null;
+        List<Gender> existingGenders = new ArrayList<>();
+        List<Sub_category> existingSub_category = subCategoryRepository.findByName(sub_category.getName());
+        if (existingSub_category.size() > 0) {
+            for (Sub_category existingSub : existingSub_category) {
+                if (existingSub.getId() == sub_category.getId()) {
+                    savedSub_category = existingSub;
+                    break;
+                }
+            }
+            if (savedSub_category == null) {
+                // If no matching subcategory found, use the first one returned
+                savedSub_category = existingSub_category.get(0);
+            }
+            for (Gender gender : sub_category.getGenders()) {
+                List<Gender> genders = genderRepository.findByName(gender.getName());
+                if (!genders.isEmpty()) {
+                    existingGender = genders.get(0);
+                    if (!savedSub_category.getGenders().contains(existingGender)) {
+                        existingGenders.add(existingGender);
+                    }
+                } else {
+                    existingGender = em.merge(gender);
+                    existingGenders.add(existingGender);
+                }
+            }
+            savedSub_category.getGenders().addAll(existingGenders);
+            savedSub_category = subCategoryRepository.save(savedSub_category);
+        } else {
+            savedSub_category = em.merge(sub_category);
+            savedSub_category = subCategoryRepository.save(savedSub_category);
+        }
+        product.setSub_categories(savedSub_category);
+
+        List<PerProduct> perProducts = product.getProducts();
+        Color savedColor = null;
+        List<Color> existingColors = null;
+        List<Size> existingSizes = new ArrayList<>();
+        Size existingSize=null;
+        int say=0;
+        for (PerProduct perProduct : perProducts) {
+            List<ProductSizes> productSizes = perProduct.getProductSizes();
+            for (ProductSizes productSize : productSizes) {
+                List<Size> size = sizeRepository.findBySizeName(productSize.getSize().getSizeName());
+                if (!size.isEmpty()) {
+                    existingSize= size.get(0);
+                    if (!existingSizes.contains(existingSize)) {
+                        existingSizes.add(existingSize);
+                    }
+                } else {
+                    existingSize = em.merge(productSize.getSize());
+                    existingSizes.add(existingSize);
+                }
+                productSize.setSize(existingSize);
+                say=say+productSize.getNumbers();
+                if (say< perProduct.getStockNumber()){
+                    productSize.setNumbers(productSize.getNumbers());
+                }else {
+                    productSize.setNumbers(11);//misal ucun bunu set elesin
+                }
+                em.merge(productSize);
+                productSize.setPerProduct(perProduct); // add reference to perProduct entity
+
+            }
+            perProduct.setProductSizes(productSizes);
+            Color color = perProduct.getColor();
+            existingColors = colorRepository.findByColorName(color.getColorName());
+            if (existingColors.size() > 0) {
+                savedColor = existingColors.get(0);
+            } else {
+                savedColor = em.merge(color);
+            }
+            int ay=0;
+            perProduct.setColor(savedColor);
+            if(existingProducts.size()>0){
+               if(perProducts.stream().anyMatch(x->x.getCode().equals(perProduct.getCode()))){
+                   for(PerProduct pp:perProductRepository.findByCode(perProduct.getCode())){
+                       ay=ay+pp.getStockNumber();
+                   }
+                   perProduct.setStockNumber(ay+perProduct.getStockNumber());
+                   perProduct.setProduct(product);
+               }
+            }else {
+                perProduct.setStockNumber(perProduct.getStockNumber());
+                perProduct.setProduct(product);
+            }
+        }
+        product.setProducts(perProducts);
+        Product savedProduct = em.merge(product);
         return new ResponseEntity<>(savedProduct, HttpStatus.CREATED);
     }
 
@@ -73,10 +176,12 @@ public class ProductController {
     }
 
     @GetMapping()
-    public ResponseEntity<?> getProducts(){
-        List<Product> products = productService.getProducts();
+    public ResponseEntity<?> getProducts(@RequestParam(defaultValue = "0") Integer pageNo,
+                                         @RequestParam(defaultValue = "10") Integer pageSize){
+        List<Product> products = productService.getProducts(pageNo,pageSize);
         return new ResponseEntity<>(products, HttpStatus.OK);
     }
+
 
     @GetMapping("/{id}")
     public ResponseEntity<?> getProductById(@PathVariable("id") Long id){
@@ -85,8 +190,10 @@ public class ProductController {
     }
 
     @GetMapping("/category/{categoryId}")
-    public ResponseEntity<?> getProductByCategory(@PathVariable("categoryId") Long category) {
-        List<Product> product = productService.getProductByCategory(category);
+    public ResponseEntity<?> getProductByCategory(@PathVariable("categoryId") Long category,
+                                                  @RequestParam(defaultValue = "0") Integer pageNo,
+                                                  @RequestParam(defaultValue = "10") Integer pageSize) {
+        List<Product> product = productService.getProductByCategory(category,pageNo,pageSize);
         return new ResponseEntity<>(product, HttpStatus.OK);
     }
 

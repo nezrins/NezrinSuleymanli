@@ -1,5 +1,6 @@
 package com.company.ecommerce.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -17,13 +18,12 @@ public class ProductSizes {
     @JoinColumn(name = "sizeId", referencedColumnName = "id")
     private Size size;
 
-
+    @JsonIgnore
     @ManyToOne(fetch = FetchType.EAGER)
+//    @Cascade(org.hibernate.annotations.CascadeType.DELETE_ORPHAN)
     @JoinColumn(name = "perProductId", referencedColumnName = "id")
     private PerProduct perProduct;
 
-
-    private int numbers;
-
+    private Integer numbers;
 
 }

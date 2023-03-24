@@ -1,6 +1,5 @@
 package com.company.ecommerce.repo;
 
-import com.company.ecommerce.entity.Color;
 import com.company.ecommerce.entity.Size;
 import org.springframework.data.jpa.repository.JpaRepository;
 

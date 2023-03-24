@@ -1,9 +1,7 @@
 package com.company.ecommerce.controller;
 
 import com.company.ecommerce.entity.Brand;
-import com.company.ecommerce.entity.Category;
 import com.company.ecommerce.service.BrandServiceImpl;
-import com.company.ecommerce.service.CategoryServiceImpl;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;

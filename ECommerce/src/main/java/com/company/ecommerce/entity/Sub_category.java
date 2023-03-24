@@ -2,12 +2,11 @@ package com.company.ecommerce.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
-import lombok.*;
-import org.hibernate.Hibernate;
-import org.jetbrains.annotations.Contract;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import java.util.List;
-import java.util.Set;
 
 @Entity
 @Getter
@@ -22,6 +21,7 @@ public class Sub_category {
 
     @JsonIgnore
     @ManyToOne(fetch = FetchType.EAGER)
+
     @JoinColumn(name = "categoryId", referencedColumnName = "id")
     private Category category;
 
@@ -39,13 +39,14 @@ public class Sub_category {
     }
 
     @JsonIgnore
-    @OneToMany(mappedBy = "category",cascade = CascadeType.ALL,fetch = FetchType.EAGER)
-    private Set<Product> products;
+//    @Cascade(org.hibernate.annotations.CascadeType.DELETE_ORPHAN)
+    @OneToMany(mappedBy = "sub_categories",fetch = FetchType.EAGER)
+    private List<Product> products;
 
-    public List<Gender> getGenders() {
-        Hibernate.initialize(genders);
-        return genders;
-    }
+//    public List<Gender> getGenders() {
+//        Hibernate.initialize(genders);
+//        return genders;
+//    }
 
 
 }

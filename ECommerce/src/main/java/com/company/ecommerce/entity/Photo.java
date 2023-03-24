@@ -22,6 +22,7 @@ public class Photo {
 
     @JsonBackReference
     @ManyToOne(fetch = FetchType.LAZY)
+//    @Cascade(org.hibernate.annotations.CascadeType.DELETE_ORPHAN)
     @JoinColumn(name = "perProductId", referencedColumnName = "id")
     private PerProduct perProduct;
 }

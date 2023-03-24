@@ -1,7 +1,6 @@
 package com.company.ecommerce.service;
 
 import com.company.ecommerce.entity.Brand;
-import com.company.ecommerce.entity.Category;
 
 import java.util.List;
 
