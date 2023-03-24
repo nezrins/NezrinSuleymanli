@@ -126,7 +126,7 @@ public class ProductController {
                 if (say< perProduct.getStockNumber()){
                     productSize.setNumbers(productSize.getNumbers());
                 }else {
-                    productSize.setNumbers(11);//misal ucun bunu set elesin
+                    productSize.setNumbers(null);//misal ucun bunu set elesin
                 }
                 em.merge(productSize);
                 productSize.setPerProduct(perProduct); // add reference to perProduct entity
