@@ -37,7 +37,7 @@ import java.util.List;
         private Brand brand;
 
 //        @Cascade(org.hibernate.annotations.CascadeType.DELETE_ORPHAN)
-        @OneToMany(mappedBy = "product",cascade = CascadeType.ALL,fetch = FetchType.LAZY)
+        @OneToMany(mappedBy = "product",cascade = CascadeType.ALL,fetch = FetchType.EAGER)
         private List<PerProduct> products;
 
     }
