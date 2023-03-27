@@ -1,28 +1,29 @@
 package com.company.ecommerce.entity;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.Getter;
+import lombok.Setter;
 
 @Entity
-@Data
-@Builder
-@NoArgsConstructor
-@AllArgsConstructor
-public class Photo {
+@Getter
+@Setter
+public class ProductSizes {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
     @Column(name = "id", nullable = false)
     private Long id;
 
-    private String link;
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "sizeId", referencedColumnName = "id")
+    private Size size;
 
-    @JsonBackReference
-    @ManyToOne(fetch = FetchType.LAZY)
+    @JsonIgnore
+    @ManyToOne(fetch = FetchType.EAGER)
 //    @Cascade(org.hibernate.annotations.CascadeType.DELETE_ORPHAN)
     @JoinColumn(name = "perProductId", referencedColumnName = "id")
     private PerProduct perProduct;
+
+    private Integer numbers;
+
 }

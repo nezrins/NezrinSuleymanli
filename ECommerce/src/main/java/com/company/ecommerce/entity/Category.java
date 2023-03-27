@@ -1,15 +1,18 @@
 package com.company.ecommerce.entity;
 
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
-import org.hibernate.Hibernate;
+import lombok.NoArgsConstructor;
 
 import java.util.List;
-import java.util.Set;
 
 @Entity
 @Data
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class Category {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
@@ -18,21 +21,12 @@ public class Category {
     @Column(name = "category_name")
     private String categoryName;
 
-    @JsonManagedReference
-    @OneToMany(mappedBy = "category",cascade = CascadeType.ALL,fetch = FetchType.EAGER)
-    private Set<Product> products;
+    private String iconLink;
 
-    @ManyToMany(cascade = { CascadeType.ALL })
-    @JoinTable(
-            name = "category_gender",
-            joinColumns = { @JoinColumn(name = "categoryId") },
-            inverseJoinColumns = { @JoinColumn(name = "genderId") }
-    )
-    private List<Gender> genders;
 
-    public List<Gender> getGenders() {
-        Hibernate.initialize(genders);
-        return genders;
-    }
+//    @JsonIgnore
+//    @Cascade(org.hibernate.annotations.CascadeType.DELETE_ORPHAN)
+    @OneToMany(mappedBy = "category", cascade = CascadeType.ALL,fetch = FetchType.EAGER)
+    private List<Sub_category> sub_categories;
 
 }

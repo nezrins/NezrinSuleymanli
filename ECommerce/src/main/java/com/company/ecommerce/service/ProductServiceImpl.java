@@ -1,20 +1,36 @@
 package com.company.ecommerce.service;
 
-import com.company.ecommerce.entity.Product;
-import com.company.ecommerce.repo.ProductRepository;
+import com.company.ecommerce.entity.*;
+import com.company.ecommerce.repo.*;
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.PersistenceContext;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
 
 @Service
 public class ProductServiceImpl implements ProductService {
 
+    @PersistenceContext
+    private EntityManager entityManager;
+
     @Autowired
     private ProductRepository productRepo;
+
+    @Autowired
+    private PerProductRepository perProductRepository;
+    @Autowired
+    private PhotoRepository photoRepository;
+    @Autowired
+    private ProductSizesRepository productSizesRepository;
+    @Autowired
+    private RateRepository rateRepository;
+
+
     public Product createProduct(Product product){
         Product savedProduct = productRepo.save(product);
         return savedProduct;
@@ -33,14 +49,28 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
+    @Transactional
     public void deleteProduct(Long id) {
         Optional<Product> product = productRepo.findById(id);
-        if(product.isPresent()){
+        if (product.isPresent()) {
             Product deletedProduct = product.get();
-            productRepo.delete(deletedProduct);
+            List<PerProduct> perProducts = deletedProduct.getProducts();
+            for (PerProduct perProduct : perProducts) {
+                for (Photo p:perProduct.getPhotos()){
+                    photoRepository.deletePhotoById(p.getId());
+                }
+                for (ProductSizes ps:perProduct.getProductSizes()){
+                    productSizesRepository.deleteProductSizesById(ps.getId());
+                }
+                for (Rate r:perProduct.getRate()){
+                    rateRepository.deleteRateById(r.getId());
+                }
+                perProductRepository.deletePerProductById(perProduct.getId());
+            }
+            productRepo.deleteProductById(deletedProduct.getId());
         }
-    }
 
+    }
     @Override
     public List<Product> getProducts() {
         List<Product> products = productRepo.findAll();
