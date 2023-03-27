@@ -14,6 +14,6 @@ public interface BrandRepository extends JpaRepository<Brand,Long> {
     List<Brand> findByBrandName(String brandName);
 
     @Modifying
-    @Query("DELETE FROM Brand p WHERE p.id = :id")
+    @Query("DELETE FROM Brand p WHERE p.brandId = :id")
     void deleteBrandById(@Param("id") Long id);
 }

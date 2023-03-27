@@ -26,8 +26,9 @@ public class SecurityConfig {
                 .csrf()
                 .disable()
                 .authorizeHttpRequests()
-                .requestMatchers("api/v1/auth/**" , "/products/**", "/bucket/**", "/categories/**" , "/brands/**")
-//                .requestMatchers("/api/v1/auth/**" , "/products" , "/products/{id}" , "/products/" , "/products/category/{categoryId}", "/products/searchByDescription")
+                .requestMatchers("/api/v1/auth/**" , "/products/**", "/bucket/**", "/categories/**" , "/brands/**"
+                ,"/bucket/add-to-bucket/{customer}/{perProduct}/{size}/{count}")
+               // .requestMatchers("/api/v1/auth/**" , "/products" , "/products/{id}" , "/products/" , "/products/category/{categoryId}", "/products/searchByDescription")
                     .permitAll()
                 .anyRequest()
                     .authenticated()

@@ -1,15 +1,15 @@
 package com.company.ecommerce.service;
 
-import com.company.ecommerce.entity.Bucket;
-import com.company.ecommerce.entity.Customer;
-import com.company.ecommerce.entity.PerProduct;
-import com.company.ecommerce.entity.Size;
+import com.company.ecommerce.entity.*;
 import com.company.ecommerce.repo.*;
 import jakarta.persistence.EntityManager;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 @Service
@@ -17,6 +17,8 @@ public class BucketServiceImpl implements BucketService {
 
     @Autowired
     ProductSizesRepository productSizesRepo;
+    @Autowired
+    OrderRepository orderRepository;
 
     @Autowired
     PerProductRepository perProductRepository;
@@ -81,5 +83,21 @@ public class BucketServiceImpl implements BucketService {
             bucketProduct.setAmountOfProduct(bucketProduct.getAmountOfProduct() - 1);
             em.merge(bucketProduct);
         }
+    }
+
+    @Override
+    @Transactional
+    public void purchaseProductsInBucket(Long customerId){
+        List<Bucket> bucketProducts = bucketRepository.findBucketProductsByCustomerId(customerId);
+        for(Bucket b : bucketProducts){
+            bucketRepository.deleteById(b.getId());
+        }
+        Customer customer =  customerRepository.findById(customerId).get();
+        Order order = Order.builder()
+                .customer(customer)
+                .date(LocalDate.now())
+                .status(OrderStatus.ACCEPTED)
+                .build();
+        em.merge(order);
     }
 }

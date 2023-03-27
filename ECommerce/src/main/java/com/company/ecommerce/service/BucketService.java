@@ -11,4 +11,5 @@ public interface BucketService {
     void deleteProductFromBucket(Long customerId, Long perProductId, Long sizeId);
     void incrementProductNumber(Long customerId, Long perProductId, Long sizeId);
     void decrementProductNumber(Long customerId, Long perProductId, Long sizeId);
+    void purchaseProductsInBucket(Long customerId);
 }

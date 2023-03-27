@@ -37,6 +37,8 @@ public class Customer implements UserDetails {
 
     private String cardNo;
 
+    private String address;
+
     @Enumerated(EnumType.STRING)
     private Role role;
 
@@ -47,6 +49,10 @@ public class Customer implements UserDetails {
     @OneToMany(mappedBy = "user", fetch = FetchType.EAGER)
     @JsonIgnore
     private List<Token> tokens;
+
+    @OneToMany(mappedBy = "customer")
+    @JsonIgnore
+    private List<Order> orders;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {

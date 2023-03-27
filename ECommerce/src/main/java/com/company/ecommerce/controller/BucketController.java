@@ -52,4 +52,10 @@ public class BucketController {
         bucketService.decrementProductNumber(customer, perProduct, size);
         return new ResponseEntity<>(HttpStatus.OK);
     }
+
+    @PostMapping(value = "/purchase/{customerId}")
+    public ResponseEntity<?> purchaseProductsInBucket(@PathVariable Long customerId){
+        bucketService.purchaseProductsInBucket(customerId);
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
 }
